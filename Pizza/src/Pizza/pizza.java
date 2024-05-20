@@ -5,6 +5,7 @@
 package Pizza;
 
 import javax.swing.table.DefaultTableModel;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -362,30 +363,55 @@ public class pizza extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-        
-        
-                
+        // Calcular o troco
+        try {
+            double pagamento = Double.parseDouble(txtPagamento.getText());
+            double total = Double.parseDouble(txtvalortotal.getText());
+            double troco = pagamento - total;
+            txtTroco.setText(String.format("%.2f", troco)); // Setando o troco formatado no campo de texto
+
+            // Construir a Nota Fiscal como uma String
+            StringBuilder notaFiscal = new StringBuilder();
+            notaFiscal.append("LARICA'S PIZZA\n");
+            notaFiscal.append("Nota Fiscal\n");
+            notaFiscal.append("-------------------------\n");
+            notaFiscal.append("Qtd | Item          | Preço  | Total\n");
+            for (int i = 0; i < jTable1.getRowCount(); i++) {
+                notaFiscal.append(jTable1.getValueAt(i, 2) + " | " +
+                        jTable1.getValueAt(i, 0) + " | R$ " +
+                        String.format("%.2f", jTable1.getValueAt(i, 1)) + " | R$ " +
+                        String.format("%.2f", jTable1.getValueAt(i, 3)) + "\n");
+            }
+            notaFiscal.append("-------------------------\n");
+            notaFiscal.append("Total a Pagar: R$ " + String.format("%.2f", total) + "\n");
+            notaFiscal.append("Pago: R$ " + String.format("%.2f", pagamento) + "\n");
+            notaFiscal.append("Troco: R$ " + String.format("%.2f", troco) + "\n");
+            notaFiscal.append("-----------\n");
+            notaFiscal.append("Obrigado pela preferência!\n");
+            notaFiscal.append("DEUS É FIEL!");
+
+            // Mostrar a Nota Fiscal em um JOptionPane
+            JOptionPane.showMessageDialog(this, notaFiscal.toString(), "Nota Fiscal", JOptionPane.INFORMATION_MESSAGE);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Por favor, insira valores numéricos válidos para pagamento.", "Erro de Entrada", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void txtvalortotalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtvalortotalActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtvalortotalActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
-        
-         model.removeRow(jTable1.getSelectedRow());
-         
+
+        model.removeRow(jTable1.getSelectedRow());
+
         double sum = 0;
-        
-         for (int a = 0; a<jTable1.getRowCount(); a++)
-        {
-           
-            sum = sum+ Integer.parseInt(jTable1.getValueAt(a, 3).toString());
-        
+
+        for (int a = 0; a < jTable1.getRowCount(); a++) {
+            sum += Double.parseDouble(jTable1.getValueAt(a, 3).toString());
         }
-        
+
         txtvalortotal.setText(Double.toString(sum));
     }//GEN-LAST:event_jButton3ActionPerformed
 
